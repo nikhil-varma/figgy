@@ -1,6 +1,9 @@
 import React, {useState} from 'react';
+import {BrowserRouter as Router, Route, Link} from 'react-router-dom';
 import styled, {ThemeProvider} from 'styled-components';
-import {GifGrid} from './components/GifGrid';
+
+import Search from './components/Search';
+import Trending from './components/Trending';
 import {light, dark} from './themes/theme';
 
 const Container = styled.div`
@@ -9,23 +12,35 @@ const Container = styled.div`
   width: 100%;
 `;
 
-const App = () => {
+export default function App() {
   const [theme, setTheme] = useState(dark);
-  return (
-    <ThemeProvider theme={theme}>
-      <Container>
-        <button
-          type="button"
-          onClick={() => {
-            setTheme(theme === dark ? light : dark);
-          }}
-        >
-          Toggle Mode
-        </button>
-        <GifGrid width={500} onGifClick={() => ({})} />
-      </Container>
-    </ThemeProvider>
-  );
-};
 
-export default App;
+  return (
+    <>
+      <ThemeProvider theme={theme}>
+        <Container>
+          <Router>
+            <div>
+              <ul>
+                <li>
+                  <Link to="/">Home</Link>
+                  <Link to="/search">Search</Link>
+                </li>
+              </ul>
+              <button
+                type="button"
+                onClick={() => {
+                  setTheme(theme === dark ? light : dark);
+                }}
+              >
+                Toggle Mode
+              </button>
+              <Route path="/" component={Trending} />
+              <Route path="/about" component={Search} />
+            </div>
+          </Router>
+        </Container>
+      </ThemeProvider>
+    </>
+  );
+}
